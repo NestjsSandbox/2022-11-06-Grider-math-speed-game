@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { delay, filter } from 'rxjs';
+import { delay, filter, scan } from 'rxjs';
 import { MathValidator } from '../math-validator';
 
 @Component({
@@ -15,16 +15,27 @@ export class EquationComponent implements OnInit {
 
   ngOnInit(): void {
 
-    const startTime = new Date();
-    let numberAnswered = 0;
-
     this.mathForm.statusChanges
       .pipe(
         filter((value) => value === 'VALID'),
-        delay(200)
+        delay(200),
+        //*  We use scan in this way: scan ( () => {}, {})  where the 2nd initial 
+        //* argument is an object. With every iteration of the scan the object we rturn from the scan will be used as input for the new iteration.
+        //*This also sets the type of acc to that object
+
+        scan ( (acc) => {
+          return {
+            numberAnswered: acc.numberAnswered + 1,
+            startTime: acc.startTime
+          }
+        }
+        , {numberAnswered: 0, startTime: new Date()}
+        ) //end scan operator
       )
       
-      .subscribe(() => {
+      //* Here n the subscribe we destructurize the value passed down from 
+      //* the scan operator in the pipe.
+      .subscribe(({numberAnswered, startTime}) => {
        
         numberAnswered++;
         this.secondsPerAnswer = (new Date().getTime() - startTime.getTime()) / numberAnswered /1000;
