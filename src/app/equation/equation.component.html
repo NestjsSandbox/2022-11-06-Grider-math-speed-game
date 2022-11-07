@@ -1,6 +1,7 @@
 <form [formGroup]="mathForm">
   <div class="equation">{{ fieldA }} + {{ fieldB }} =</div>
-  <input formControlName="fieldAnswer" />
+  <!-- (1) First we add the custom directive named 'appAnswerHighlightDirective'-->
+  <input appAnswerHighlightDirective formControlName="fieldAnswer" />
 </form>
 
 <div class="status">

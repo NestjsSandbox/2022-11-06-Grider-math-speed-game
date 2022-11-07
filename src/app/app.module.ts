@@ -4,11 +4,13 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
 import { EquationComponent } from './equation/equation.component';
+import { AnswerHighlightDirectiveDirective } from './answer-highlight-directive.directive';
 
 @NgModule({
   declarations: [
     AppComponent,
-    EquationComponent
+    EquationComponent,
+    AnswerHighlightDirectiveDirective,
   ],
   imports: [
     BrowserModule, ReactiveFormsModule,
