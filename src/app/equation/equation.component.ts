@@ -11,38 +11,31 @@ import { MathValidator } from '../math-validator';
 export class EquationComponent implements OnInit {
   constructor() {}
 
+  secondsPerAnswer: number = 0;
+
   ngOnInit(): void {
+
+    const startTime = new Date();
+    let numberAnswered = 0;
 
     this.mathForm.statusChanges
       .pipe(
-        filter( value => value === 'VALID'),
+        filter((value) => value === 'VALID'),
         delay(200)
       )
-      .subscribe( () => {
+      
+      .subscribe(() => {
+       
+        numberAnswered++;
+        this.secondsPerAnswer = (new Date().getTime() - startTime.getTime()) / numberAnswered /1000;
 
-    //* This is another option to verify if the form is valid, it uses an if-statement
-    // instead of the 'filter()' operator.
-    // this.mathForm.statusChanges.pipe((delay(200))).subscribe((value) => {
-    //   if (value === 'INVALID') {
-    //     return; //If wrong answer then ignore
-    //   }
 
-      //From this line downward is the case where user entered a correct answer
-
-      //(1) Generate new random numbers and emoty the Answer field to reset equation
-      //*This is the long-way to set multiple values:
-      // this.mathForm.controls.fieldA.setValue(this.generateRandomNumber());
-      // this.mathForm.controls.fieldB.setValue(this.generateRandomNumber());
-      // this.mathForm.controls.fieldAnswer.setValue('');
-
-      //*This is the long-way to set multiple values:
-      this.mathForm.setValue({
-        fieldA: this.generateRandomNumber(),
-        fieldB: this.generateRandomNumber(),
-        fieldAnswer: '',
+        this.mathForm.setValue({
+          fieldA: this.generateRandomNumber(),
+          fieldB: this.generateRandomNumber(),
+          fieldAnswer: '',
+        });
       });
-
-    });
   }
 
   mathForm = new FormGroup(
